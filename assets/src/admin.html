@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Care: Admin</title>
+    <link rel="shortcut icon" href="https://img.freepik.com/free-vector/charity-logo-hands-supporting-heart-icon-flat-design-vector-illustration_53876-136265.jpg?t=st=1731789394~exp=1731792994~hmac=a290b7eafdabfe28645079fca945f3c37b2e280b64c3e14b5f3fac94afaf650b&w=740" type="image/png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+<body class="bg-danger">
+    
+    <!--Navbar-->
+    <section>
+        <nav class="navbar col-12 navbar-expand-lg position-fixed bg-light text-black" style="z-index: 99; top: 0;">
+            <div class="container-fluid col-11 m-auto">
+                <a href="../../index.html">
+                    <img src="https://img.freepik.com/free-vector/charity-logo-hands-supporting-heart-icon-flat-design-vector-illustration_53876-136265.jpg?t=st=1731789394~exp=1731792994~hmac=a290b7eafdabfe28645079fca945f3c37b2e280b64c3e14b5f3fac94afaf650b&w=740" class="img-fluid" alt="LOGO" style="width: 40px; height: 40px;">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">                  
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../../index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="login.html">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="register.html">Inscreva-se</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#bottom">Sobre</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </section>
+
+    <!--Card-->
+    <section class="row justify-content-center" style="margin-top: 100px;">
+      <div class="card m-3" style="width: 20rem;">
+          <div class="card-body">
+              <h5 class="card-title text-center">Usuário</h5>
+              <p class="card-text text-center" id="dados-usuario">Carregando...</p>
+          </div>
+      </div>
+  </section>
+  
+
+    <!--Accordion-->
+    <section>
+        <div class="accordion m-5" id="accordionExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Caixa de entrada
+                  </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <!-- Caixa de Entrada -->
+                    <div id="caixaEntrada" class="container mt-4">
+                      <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                          <thead class="table-dark">
+                            <tr>
+                              <th class="w-50" scope="col">Conteúdo</th>
+                              <th class="w-25" scope="col">Autor</th>
+                              <th class="w-25 text-center" scope="col">Selecionar</th>
+                            </tr>
+                          </thead>
+                          <tbody id="listaCartas">
+                            <!-- As cartas serão carregadas dinamicamente -->
+                          </tbody>
+                        </table>
+                      </div>
+              
+                      <!-- Exibição do conteúdo completo -->
+                      <div id="conteudoCartaCompleto" class="mt-4" style="display: none;">
+                        <h5>Conteúdo Completo</h5>
+                        <textarea id="cartaTextoCompleto" class="form-control" rows="5" readonly></textarea>
+                      </div>
+              
+                      <!-- Botão para descartar selecionadas -->
+                      <div class="d-flex justify-content-end mt-4">
+                        <button id="descartarSelecionadas" class="btn btn-danger">Descartar Selecionadas</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <!--Enviar carta-->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  Enviar carta
+                </button>
+              </h2>
+              <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <textarea name="toSentLetter" id="toSentLetterID" placeholder="Escreva sua carta aqui." class="row mt-3 m-auto w-75"></textarea>
+                    <div class="d-flex justify-content-center mt-2">
+                        <input type="button" value="Enviar" class="btn btn-danger justify-content-center d-flex mt-3">
+                    </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Responder Carta -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Responder carta
+                </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <!-- Botão para receber uma carta -->
+                    <div id="receberCartaContainer" class="justify-content-center d-flex">
+                    <input id="receberCartaBtn" type="button" value="Receber uma carta" class="btn btn-danger mx-3">
+                    </div>
+            
+                    <!-- Espaço para exibir a carta recebida -->
+                    <div id="cartaRecebida" class="mt-3" style="display: none;">
+                    <!-- Texto da carta recebida (não editável) -->
+                    <textarea id="conteudoCarta" class="form-control mb-3" rows="4" readonly></textarea>
+            
+                    <!-- Espaço para resposta -->
+                    <textarea id="respostaCarta" class="form-control mb-3" rows="4" placeholder="Escreva sua resposta aqui"></textarea>
+            
+                    <!-- Botões para descartar ou enviar a resposta -->
+                    <div class="d-flex justify-content-center">
+                        <button id="descartarCartaBtn" class="btn mx-3 btn-danger">Não quero responder essa carta</button>
+                        <button id="enviarRespostaBtn" class="btn mx-3 btn-danger">Enviar resposta</button>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+  
+              
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                    Usuários cadastrados
+                  </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <textarea id="campoUsuarios" rows="10" cols="30" readonly></textarea>
+                    <br>
+                    <button id="carregarUsuarios" class="btn mx-3 btn-danger">Carregar Usuários</button>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--Card-->
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            // Supondo que o usuário atual esteja autenticado com ID armazenado em localStorage
+            const userId = localStorage.getItem('userId');
+            if (!userId) {
+                alert('Usuário não autenticado.');
+                return;
+            }
+
+            // Buscar informações do usuário
+            const usuarioResponse = await axios.get(`http://localhost:5000/api/usuarios/${userId}`);
+            const usuario = usuarioResponse.data;
+
+            // Atualizar Card
+            document.getElementById('dados-usuario').textContent = `Nome: ${usuario.nome}, Idade: ${usuario.idade}`;
+            
+
+        } catch (error) {
+            console.error('Erro ao carregar informações:', error);
+            alert('Erro ao carregar informações do servidor.');
+        }
+        });
+
+        // Função para carregar os nomes dos usuários
+        async function carregarUsuarios() {
+            try {
+                // Fazendo uma requisição GET para a API
+                const resposta = await fetch('http://localhost:5000/api/usuarios');
+                if (!resposta.ok) {
+                    throw new Error('Erro ao buscar os usuários');
+                }
+
+                // Convertendo a resposta para JSON
+                const usuarios = await resposta.json();
+
+                // Extraindo os nomes dos usuários
+                const nomes = usuarios.map(usuario => usuario.nome).join('\n');
+
+                // Exibindo os nomes no campo de texto
+                document.getElementById('campoUsuarios').value = nomes;
+            } catch (erro) {
+                console.error(erro);
+                alert('Erro ao carregar usuários!');
+            }
+        }
+
+        // Associando a função ao botão
+        document.getElementById('carregarUsuarios').addEventListener('click', carregarUsuarios);
+    </script>
+
+    <!--Enviar cartas-->
+    <script>
+        // Script de Enviar Carta
+        document.addEventListener('DOMContentLoaded', () => {
+        // Seleciona o botão de enviar carta dentro da aba "Enviar carta" e associa o evento de clique
+        const enviarCartaBtn = document.querySelector('#collapseTwo input[type="button"][value="Enviar"]');
+        
+        // Adiciona o evento de clique ao botão "Enviar"
+        enviarCartaBtn.addEventListener('click', async () => {
+            await enviarCarta(); // Chama a função de enviar carta
+        });
+    });
+
+    // Função para enviar a carta
+    async function enviarCarta() {
+        const cartaConteudo = document.getElementById('toSentLetterID').value; // Obtém o conteúdo da carta do campo de texto
+        const userId = localStorage.getItem('userId'); // Obtém o ID do usuário do localStorage
+        
+        // Verifica se o conteúdo da carta não está vazio
+        if (!cartaConteudo.trim()) {
+            alert('A carta não pode estar vazia!'); // Alerta caso a carta esteja vazia
+            return;
+        }
+
+        // Exibe os dados no console para conferirmos
+        console.log({ escritor: userId, conteudo: cartaConteudo });
+
+        // Exibe uma janela de confirmação
+        const confirmarEnvio = window.confirm('Você tem certeza que deseja enviar essa carta?');
+        if (confirmarEnvio) {
+            try {
+                // Cria o objeto da nova carta
+                const novaCarta = {
+                    escritor: userId,
+                    conteudo: cartaConteudo,
+                    tipo: 'carta', // Definido como 'carta' (não é uma resposta)
+                    respostas: [] // Inicialmente, a carta não tem respostas
+                };
+
+                // Envia a carta para o servidor via POST
+                const resposta = await axios.post('http://localhost:5000/api/cartas', novaCarta);
+
+                // Verifica se a carta foi enviada com sucesso
+                if (resposta.status === 201) {
+                    alert('Carta enviada com sucesso!'); // Alerta de sucesso
+                    document.getElementById('toSentLetterID').value = ''; // Limpa o campo de texto após o envio
+                } else {
+                    alert('Erro ao enviar a carta. Tente novamente.'); // Caso ocorra algum erro no envio
+                }
+            } catch (erro) {
+                console.error(erro); // Exibe erro no console
+                alert('Erro ao enviar carta para o servidor.'); // Alerta caso o servidor tenha falhado
+            }
+        }
+    }
+
+    </script>
+
+    <!-- Responder cartas -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const receberCartaBtn = document.getElementById('receberCartaBtn');
+            const cartaRecebidaDiv = document.getElementById('cartaRecebida');
+            const conteudoCarta = document.getElementById('conteudoCarta');
+            const respostaCarta = document.getElementById('respostaCarta');
+            const descartarCartaBtn = document.getElementById('descartarCartaBtn');
+            const enviarRespostaBtn = document.getElementById('enviarRespostaBtn');
+
+            // Função para obter uma carta não respondida
+            receberCartaBtn.addEventListener('click', async () => {
+                try {
+                    const userId = localStorage.getItem('userId');
+                    if (!userId) {
+                        alert('Usuário não autenticado.');
+                        return;
+                    }
+
+                    // Obter uma carta não respondida aleatória
+                    const response = await axios.get(`http://localhost:5000/api/cartas-nao-respondidas?escritorId=${userId}`);
+                    const cartas = response.data;
+
+                    if (cartas && cartas.length > 0) {
+                        const carta = cartas[0]; // Pega a carta aleatória
+
+                        // Exibir a carta recebida
+                        conteudoCarta.value = carta.conteudo;
+                        conteudoCarta.dataset.cartaId = carta._id; // ID da carta
+                        conteudoCarta.dataset.cartaEscritor = carta.escritor; // ID do escritor
+                        cartaRecebidaDiv.style.display = 'block';
+                        receberCartaBtn.style.display = 'none'; // Oculta o botão "Receber uma carta"
+                    } else {
+                        alert('Não há cartas não respondidas disponíveis.');
+                    }
+                } catch (error) {
+                    console.error('Erro ao receber carta:', error);
+                    alert('Ocorreu um erro ao tentar receber uma carta ou não há cartas a serem recebidas.');
+                }
+            });
+
+            // Função para descartar a carta
+            descartarCartaBtn.addEventListener('click', () => {
+                if (confirm('Tem certeza de que deseja descartar esta carta?')) {
+                    cartaRecebidaDiv.style.display = 'none';
+                    respostaCarta.value = ''; // Limpa o campo de resposta
+                    conteudoCarta.value = ''; // Limpa o conteúdo da carta
+                    receberCartaBtn.style.display = 'block'; // Mostra o botão "Receber uma carta"
+                }
+            });
+
+            // Função para enviar a resposta
+            enviarRespostaBtn.addEventListener('click', async () => {
+                try {
+                    const respostaConteudo = respostaCarta.value;
+                    if (!respostaConteudo.trim()) {
+                        alert('A resposta não pode estar vazia.');
+                        return;
+                    }
+
+                    if (!confirm('Tem certeza de que deseja enviar esta resposta?')) {
+                        return;
+                    }
+
+                    // Obter o ID da carta que está sendo respondida
+                    const cartaId = conteudoCarta.dataset.cartaId;
+
+                    // Obter o ID do escritor original (destinatário da resposta)
+                    const destinatario = conteudoCarta.dataset.cartaEscritor;
+
+                    // Criar o objeto de resposta
+                    const resposta = {
+                        conteudo: respostaConteudo,
+                        tipo: 'resposta',
+                        respostas: [],
+                        escritor: localStorage.getItem('userId'), // Quem está respondendo
+                        destinatario // Quem receberá a resposta
+                    };
+
+                    // Enviar a resposta para o servidor
+                    await axios.post(`http://localhost:5000/api/cartas/${cartaId}/respostas`, resposta);
+
+                    alert('Resposta enviada com sucesso!');
+                    cartaRecebidaDiv.style.display = 'none'; // Esconde a carta recebida
+                    respostaCarta.value = ''; // Limpa o campo de resposta
+                    conteudoCarta.value = ''; // Limpa o conteúdo da carta
+                    receberCartaBtn.style.display = 'block'; // Mostra o botão "Receber uma carta"
+                } catch (error) {
+                    console.error('Erro ao enviar resposta:', error);
+                    alert('Erro ao tentar enviar a resposta.');
+                }
+            });
+        });
+    </script>
+
+
+    <!--Caixa de entrada-->
+    <script>
+        // Script para gerenciar a caixa de entrada
+        document.addEventListener('DOMContentLoaded', async () => {
+        const userId = localStorage.getItem('userId');
+        const listaCartas = document.getElementById('listaCartas');
+        const cartaTextoCompleto = document.getElementById('cartaTextoCompleto');
+        const conteudoCartaCompleto = document.getElementById('conteudoCartaCompleto');
+        const descartarSelecionadas = document.getElementById('descartarSelecionadas');
+
+        // Função para carregar cartas da caixa de entrada
+        async function carregarCaixaEntrada() {
+        try {
+            const response = await axios.get(`http://localhost:5000/api/caixa-entrada/${userId}`);
+            const cartas = response.data;
+
+            // Limpar a tabela antes de preencher
+            listaCartas.innerHTML = '';
+
+            // Preencher a tabela com as cartas recebidas
+            cartas.forEach((carta) => {
+                const linha = document.createElement('tr');
+                linha.innerHTML = `
+                    <td><a href="#" class="link-carta" data-id="${carta._id}">${carta.conteudo.slice(0, 30)}...</a></td>
+                    <td>${carta.escritor.nome}</td>
+                    <td class="text-center">
+                        <input type="checkbox" class="checkbox-carta" data-id="${carta._id}" />
+                    </td>
+                `;
+                listaCartas.appendChild(linha);
+            });
+
+            // Adicionar eventos aos links das cartas
+            document.querySelectorAll('.link-carta').forEach((link) => {
+                link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const cartaId = link.dataset.id;
+                const carta = cartas.find((c) => c._id === cartaId);
+                cartaTextoCompleto.value = carta.conteudo;
+                conteudoCartaCompleto.style.display = 'block';
+                });
+            });
+        } catch (error) {
+            console.error('Erro ao carregar caixa de entrada:', error);
+            alert('Erro ao carregar cartas.');
+        }
+        }
+
+        // Função para descartar cartas selecionadas
+        descartarSelecionadas.addEventListener('click', async () => {
+        const checkboxes = document.querySelectorAll('.checkbox-carta:checked');
+        const idsSelecionados = Array.from(checkboxes).map((checkbox) => checkbox.dataset.id);
+
+        if (idsSelecionados.length === 0) {
+            alert('Nenhuma carta selecionada para descarte.');
+            return;
+        }
+
+        try {
+            await axios.delete('http://localhost:5000/api/cartas', { data: { ids: idsSelecionados } });
+
+            // Remover cartas da interface
+            idsSelecionados.forEach((id) => {
+                const linha = document.querySelector(`.checkbox-carta[data-id="${id}"]`).closest('tr');
+                linha.remove();
+            });
+            alert('Cartas descartadas com sucesso!');
+        } catch (error) {
+            console.error('Erro ao descartar cartas:', error);
+            alert('Erro ao descartar cartas.');
+        }
+        });
+
+        // Carregar cartas ao abrir a página
+        carregarCaixaEntrada();
+        });
+    </script>
+    
+</body>
+<footer class="d-flex justify-content-center mt-5 text-light" id="bottom">
+    <p>&copy; 2024 Community Care. Todos os direitos reservados.</p>
+</footer>

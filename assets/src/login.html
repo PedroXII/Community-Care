@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Care: Login</title>
+    <link rel="shortcut icon" href="https://img.freepik.com/free-vector/charity-logo-hands-supporting-heart-icon-flat-design-vector-illustration_53876-136265.jpg?t=st=1731789394~exp=1731792994~hmac=a290b7eafdabfe28645079fca945f3c37b2e280b64c3e14b5f3fac94afaf650b&w=740" type="image/png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-danger">
+    <!--Navbar-->
+    <section>
+    <nav class="navbar col-12 navbar-expand-lg position-fixed bg-light text-black" style="z-index: 99; top: 0;">
+        <div class="container-fluid col-11 m-auto">
+            <a href="../../index.html">
+                <img src="https://img.freepik.com/free-vector/charity-logo-hands-supporting-heart-icon-flat-design-vector-illustration_53876-136265.jpg?t=st=1731789394~exp=1731792994~hmac=a290b7eafdabfe28645079fca945f3c37b2e280b64c3e14b5f3fac94afaf650b&w=740" class="img-fluid" alt="LOGO" style="width: 40px; height: 40px;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">                  
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="assets/src/register.html">Inscreva-se</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#bottom">Sobre</a>
+                    </li>
+                </ul>
+          </div>
+        </div>
+      </nav>
+    </section>
+
+    <!--Bloco de login-->
+    <div class="container justify-content-center align-items-center" style="margin-top: 100px;">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card p-4 shadow-lg">
+                    <h3 class="text-center mb-4 text-black">Login</h3>
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label class="form-label text-black">Nome de usuário</label>
+                            <input id="username" type="text" class="form-control" placeholder="Digite seu nome de usuário" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-black">Senha</label>
+                            <input id="password" type="password" class="form-control" placeholder="Digite sua senha" required>
+                        </div>
+                        <button id="loginButton" type="submit" class="btn btn-danger w-100">Entrar</button>
+                        <p class="m-0">Não tem login? <a href="../src/register.html">Inscreva-se!</a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Script-->
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function (event) {
+            // Previne o comportamento padrão do formulário
+            event.preventDefault();
+    
+            // Obtém os valores dos campos
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+    
+            // Valida se os campos estão preenchidos
+            if (!username || !password) {
+                alert('Por favor, preencha todos os campos!');
+                return;
+            }
+    
+            try {
+                // Envia os dados para o back-end
+                const response = await axios.post('http://localhost:5000/api/login', {
+                    nome: username,
+                    senha: password
+                });
+    
+                // Verifica a resposta
+                if (response.status === 200) {
+                    // Armazena o ID do usuário no localStorage
+                    const userId = response.data._id; // Certifique-se de que o backend retorna o _id
+                    localStorage.setItem('userId', userId);
+    
+                    // Redireciona para admin.html
+                    window.location.href = '../src/admin.html';
+                }
+            } catch (error) {
+                // Verifica o tipo de erro e exibe uma mensagem apropriada
+                if (error.response && error.response.status === 401) {
+                    alert('Nome de usuário ou senha inválidos!');
+                } else if (error.response && error.response.status === 404) {
+                    alert('Usuário não encontrado!');
+                } else {
+                    console.error('Erro inesperado:', error.message);
+                    alert('Erro inesperado. Tente novamente mais tarde.');
+                }
+            }
+        });
+    </script>
+
+</body>
+<footer class="d-flex justify-content-center mt-5 text-light">
+    <p>&copy; 2024 Community Care. Todos os direitos reservados.</p>
+</footer>
